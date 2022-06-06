@@ -1,0 +1,184 @@
+<md-card layout="column" ng-if="layer.expanded=='metadata'">
+							<md-toolbar class="ternaryToolbar">
+								<div class="md-toolbar-tools">
+									<h2>{{layer.expanded}}</h2>
+									<span flex></span>
+									<calculated-field ng-model="layer" additional-info="datasetsAdditionalInfos[layer.dsId]"></calculated-field>
+								</div>
+							</md-toolbar>
+							<md-card-content flex layout="column" class="noPadding">
+								<md-subheader>Spatial Attribute</md-subheader>
+								<div layout-padding>
+									<table class="kn-table kn-table-row-highlight" ng-if="newModel.content.layers.length > 0" >
+										<thead>
+											<tr>
+												<th>Column</th>
+												<th>Coordinates Type</th>
+												<th>Coordinates Format</th>
+											<!-- 	<th>Json Feature Type</th> -->
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="column in layer.content.columnSelectedOfDataset | filter:{'fieldType':'SPATIAL_ATTRIBUTE'}" >
+												
+												<td>  {{column.name}}</td>
+												<td>
+													<md-input-container >
+														<md-select ng-model="column.properties.coordType" ng-init="column.properties.coordType = column.properties.coordType || 'string'" ng-change="changeCoordType(layer)">
+															<md-option value="string">string</md-option>
+															<md-option value="json">JSON</md-option>
+															<md-option value="wkt">WKT Format</md-option>
+														</md-select>
+													</md-input-container>
+												</td>
+												<td>
+													<md-input-container >
+														<md-select ng-model="column.properties.coordFormat" ng-init="column.properties.coordFormat = column.properties.coordFormat || 'lon lat'">
+															<md-option value="lon lat">lon lat</md-option>
+															<md-option value="lat lon">lat lon</md-option>
+														</md-select>
+													</md-input-container>
+												</td>
+												<!-- <td>
+													<md-input-container ng-if="column.properties.coordType == 'json'">
+														<md-select ng-model="column.properties.jsonFeatureType" ng-init="column.properties.jsonFeatureType = column.properties.jsonFeatureType || 'Point'">
+															<md-option value="Point">Simple Marker (Point)</md-option>
+															<md-option value="Other">Other</md-option>
+														</md-select>
+													</md-input-container>
+												</td> -->
+											</tr>
+										</tbody>
+									</table>
+								</div>	
+								<md-subheader>Fields</md-subheader>	
+								<div layout-padding>
+									<div layout="column" layout-align="center center" >
+										<div class="kn-info" flex="60" ng-if="confrontationDsList.length > 0">
+											Some fields in the template has been changed. You can reassign them or add the new ones.
+											<md-button ng-click="addField(layer)">Add field</md-button>
+										</div>
+										<table class="kn-table kn-table-row-highlight kn-table-alternated-rows" ng-if="newModel.content.layers.length > 0" layout-padding>
+										<thead>
+											<tr>
+												<th>{{translate.load('sbi.cockpit.map.edit.metadata.column')}}</th>
+												<th>{{translate.load('sbi.cockpit.map.edit.metadata.alias')}}</th>
+												<th>{{translate.load('sbi.cockpit.map.edit.metadata.type')}}</th>
+												<th>{{translate.load('sbi.cockpit.map.edit.metadata.aggregationFunction')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.aggregateBy')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.showOnDetail')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.showOnMap')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.showOnFilter')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.showOnTooltip')}}</th>
+												<th style="text-align:center">{{translate.load('sbi.cockpit.map.edit.metadata.modalColumn')}}</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="column in layer.content.columnSelectedOfDataset | orderBy: '{ fieldType: fieldType, name: name}':false:columnsComparator  track by $index">
+												
+												<td>
+													<md-input-container ng-if="!column.isCalculated && !checkDs(column)" layout="row" layout-align="start center">
+														<i class="fa fa-warning"><md-tooltip>The column name is changed, select a field from the existing ones</md-tooltip></i> 
+														<md-select ng-model="column.name" aria-label="column name" ng-change="updateDsList(layer, column)" ng-init="column.name=''">
+															<md-option value=""></md-option>
+															<md-option ng-repeat="col in confrontationDsList" ng-value="col.name" ng-if="col.fieldType != 'SPATIAL_ATTRIBUTE'">{{col.name}}</md-option>
+														</md-select>
+													</md-input-container>
+													
+													<span ng-if="!column.isCalculated && checkDs(column)">{{column.name}}</span>
+													
+												</td>
+												<td>
+													<md-input-container>
+														<input ng-if="column.fieldType=='MEASURE' || column.fieldType=='ATTRIBUTE'" ng-model="column.aliasToShow" type="text" aria-label="column alias">
+													</md-input-container>
+												</td>
+												<td>{{column.fieldType}}</td>
+												<td>
+													<md-input-container ng-if="column.fieldType === 'MEASURE' && !column.isCalculated">
+														<md-select
+																ng-model="column.aggregationSelected"
+																ng-disabled="disableAggregationForMeasures(layer)"
+																aria-label="column aggregation">
+															<md-option md-option-empty="true"></md-option>
+															<md-option
+																	ng-repeat="func in availableAggregationFunctionsForMeasures"
+																	ng-value="func">
+																{{func}}
+															</md-option>
+														</md-select>
+													</md-input-container>
+													<md-input-container ng-if="column.fieldType === 'SPATIAL_ATTRIBUTE'">
+														<md-select
+																ng-model="column.aggregationSelected"
+																ng-disabled="column.properties.aggregateBy || disableAggregationForMeasures(layer)"
+																aria-label="column aggregation">
+															<md-option md-option-empty="true"></md-option>
+															<md-option
+																	ng-repeat="func in availableAggregationFunctionsForSpatialAttribute"
+																	ng-value="func">
+																{{func}}
+															</md-option>
+														</md-select>
+													</md-input-container>
+												</td>
+												<td style="text-align:center">
+													<md-checkbox ng-model="column.properties.aggregateBy" aria-label="Aggregate by this attribute" ng-if="column.fieldType=='ATTRIBUTE' || column.fieldType=='SPATIAL_ATTRIBUTE'" ng-change="setAggregateBy(column,layer)"/>
+												</td>
+												<td style="text-align:center">
+													<md-checkbox ng-model="column.properties.showDetails" aria-label="Show column on details" ng-if="column.fieldType=='MEASURE' || column.fieldType=='ATTRIBUTE'"  ng-disabled="column.fieldType=='ATTRIBUTE' && !column.properties.aggregateBy"/>
+												</td>
+												<td style="text-align:center">
+													<md-checkbox ng-model="column.properties.showMap" aria-label="Show column on map" ng-if="column.fieldType=='MEASURE'"/>
+												</td>
+												<td style="text-align:center">
+													<md-checkbox ng-model="column.properties.showFilter" aria-label="Show column on filter" ng-if="column.fieldType=='ATTRIBUTE'" ng-disabled="!column.properties.aggregateBy"/>
+												</td>
+												<td style="text-align:center">
+													<md-checkbox ng-model="column.properties.showTooltip" ng-change="setTooltipCol(layer,column)"  aria-label="Show column on tooltip" />
+												</td>
+												<td style="display: flex;justify-content: center;">
+													<md-switch ng-if="column.fieldType == 'ATTRIBUTE' || column.fieldType == 'SPATIAL_ATTRIBUTE'" ng-model="column.properties.modal" class="noMargin" ng-change="setModalColumn(column,layer)" aria-label="modal" ng-disabled="!column.properties.aggregateBy"></md-switch>
+												</td>
+												<td style="text-align:center" class="multiTableAction">
+
+													<md-menu ng-if="column.fieldType !== 'SPATIAL_ATTRIBUTE'">
+														<md-button aria-label="Column options" class="md-icon-button" ng-click="openColumnMenu($mdOpenMenu,$event)">
+															<md-icon md-menu-origin md-font-icon="fas fa-ellipsis-v"></md-icon>
+															<md-tooltip md-delay="500">{{::translate.load("kn.generic.moreoptions")}}</md-tooltip>
+														</md-button>
+														<md-menu-content width="4">
+															<md-menu-item ng-if="column.fieldType === 'MEASURE'">
+																<md-button ng-click="getThresholds($event,column)">
+																	<md-icon md-font-icon="fa fa-sliders" aria-label="Edit thresholds"></md-icon>
+																	{{translate.load('sbi.cockpit.map.edit.metadata.threshold')}}
+																</md-button>
+															</md-menu-item>
+															<md-menu-item ng-if="column.fieldType === 'MEASURE'">
+																<md-button ng-click="setColumnStyle($event,column)">
+																	<md-icon md-font-icon="fa fa-paint-brush" aria-label="Edit style"></md-icon>
+																	{{translate.load('sbi.cockpit.map.edit.metadata.style')}}
+																</md-button>
+															</md-menu-item>
+															<md-menu-item ng-if="column.isCalculated || !checkDs(column,false)" class="insideMenu">
+																<calculated-field ng-model="layer" selected-item="$index" inside-menu="true" additional-info="datasetsAdditionalInfos[layer.dsId]"></calculated-field>
+															</md-menu-item>
+															<md-menu-divider ng-if="column.fieldType === 'MEASURE'"></md-menu-divider>
+															<md-menu-item>
+																<md-button ng-click="deleteColumn(layer,column)">
+																	<md-icon md-font-icon="fa fa-trash"></md-icon>
+																	{{translate.load('sbi.cockpit.map.edit.metadata.delete')}}
+																</md-button>
+															</md-menu-item>
+														</md-menu-content>
+													</md-menu>
+
+												</td>
+
+											</tr>
+										</tbody>
+									</table>	
+								</div>
+							</md-card-content>
+						</md-card>

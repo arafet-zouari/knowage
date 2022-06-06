@@ -1,0 +1,109 @@
+.kn-importExportDocument {
+
+	.documentsFilter{
+		background-color: lighten($ternaryColor, 15%);
+	}
+
+	#filterDatepickerContainer {
+		&.md-input-has-value, &.md-input-focused {
+			label:not(.md-no-float) {
+				-webkit-transform: translate3d(0,12px,0) scale(.75);
+	    		transform: translate3d(0,12px,0) scale(.75);
+	    	}
+		}
+		#filterDatepicker {
+			display: inline-flex;
+			justify-content: start;
+			align-items: center;
+			width: 100%;
+			margin: 0;
+			&> button {
+				float: none;
+			}
+			.md-datepicker-input-container {
+				width: calc(100% - 60px);
+				border-bottom-color: #ccc;
+				padding: 0;
+				.md-datepicker-input{
+					width: 100%;
+					max-width: none;
+				}
+			}
+		}
+	}
+
+	.exportOptions {
+		background-color: lighten($ternaryColor, 15%);
+		.layout-column {
+			padding: 16px;
+			md-checkbox {
+				._md-label {
+					font-size: $baseFontSize;
+				}
+			}
+		}
+	}
+	.absolute {
+		position:absolute;
+	}
+
+	md-tabs-canvas {
+    	background-color: $tabBackground;
+	}
+
+	div.importSteps>md-content {
+		    height: calc(100% - 25px);
+	}
+
+	.sourceTargetToolbar {
+	/* 	background-color: rgba(63, 81, 181, 0.38); */
+	    text-align: center;
+	    z-index: 4;
+	        margin-bottom: 1px;
+	}
+
+	.importSteps .md-subheader-wrapper,.importSteps .md-subheader {
+		text-align: center;
+	}
+
+	.centerText{
+		 text-align: center;
+	}
+
+	.miniheadimportexport {
+		h2 {
+			padding-left: 14px;
+		}
+	}
+
+	.mainContainer {
+		background-color: $importExportBackground;
+	}
+	md-radio-button {
+		display: flex;
+		align-items: center;
+	}
+
+	.internalFab.md-knowage-theme {
+		top:-10px !important;
+	}
+	.line-container {
+		max-width: 100rem !important;
+	}
+
+	#AssociationFileUploadImport {
+		padding: 0;
+	}
+	#fileUploadImport {
+		padding: 0;
+	}
+	component-tree {
+		md-checkbox {
+			margin-bottom: 0;
+			display: flex;
+			align-items: center;
+		}
+	}
+	
+
+}

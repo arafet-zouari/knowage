@@ -1,0 +1,42 @@
+.kn-license {
+	md-list-item-text {
+		.md-list-item-text {
+			h3 {
+				line-height: 1rem;
+			}
+		}
+	}
+	.importButtonContainer {
+		right: 20px;
+	    bottom: -10px;
+	    position: absolute;
+	    width: 40px;
+	}
+
+	.licenseTopButtons {
+		position: relative;
+	}
+
+	.listItemLineHeight {
+		line-height: 1rem;
+	}
+	
+	.innerDialog {
+	    position: absolute;
+	    z-index: 89;
+	    left: 50%;
+	    top: 50%;
+	    transform: translate(-50%, -50%);
+	    width: 80%;
+	    min-height: 150px;
+    }
+    
+    .innerDialogBackdrop {
+		position: absolute;
+  	    z-index: 88;
+  	    left: 0;
+    	top: 0;
+    	background-color: rgba(0, 0, 0, 0.4);
+    }
+}
+

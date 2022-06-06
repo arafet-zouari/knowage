@@ -1,0 +1,24 @@
+
+<md-dialog aria-label="table configuration" ng-cloak  layout="column" style="max-height: 80%;width: 80%;">
+<form name="parameterForm"   ng-cloak flex layout="column">
+    <md-toolbar class="secondaryToolbar" layout="row">
+		<h1 flex class="md-toolbar-tools">{{translate.load('sbi.cockpit.mainpanel.btn.parameters')}}</h1>
+	</md-toolbar>
+    <md-dialog-content flex layout="row" layout-align="center center">
+    	<div flex="60" class="kn-warning">
+    		{{translate.load('sbi.cockpit.parameter.and.driver')}}
+		</div>
+	</md-dialog-content>
+			
+	    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button class="md-raised" ng-click="cancelConfiguration()" >
+        {{translate.load('sbi.generic.cancel')}}
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="saveConfiguration()" ng-disabled=" parameterForm.$invalid" >
+        {{translate.load('sbi.generic.close')}} 
+      </md-button>
+    </md-dialog-actions>
+	 
+</form>
+</md-dialog>

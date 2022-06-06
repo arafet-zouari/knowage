@@ -1,0 +1,27 @@
+<md-dialog class="kn-chartdesigner" style="min-width:400px;">
+ <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{::translate.load("kn.cockpit.chartswitch.availablecharttypes")}}</h2>
+      </div>
+    </md-toolbar>
+    <md-dialog-content layout-padding>
+    <div layout="row" layout-align="center center" ng-if="chartTypes.length == 0">
+    	<div class="kn-info">
+    		{{::translate.load("kn.cockpit.chartswitch.nocharts")}}
+    	</div>
+    </div>
+   	<md-grid-list ng-if="chartTypes.length > 0" style="margin-top:16px;" md-cols-gt-md="3" md-cols-md="3" md-cols-sm="2" md-gutter="16px" md-row-height="1:1">
+	    <md-grid-tile ng-repeat="chart in chartTypes" class="{{chart}}" ng-click="changeChartType(chart,isOriginal)" ng-class="{'active':selectedChartType == chart,'suggested':suggestedChartType == chart}">
+	    	<i class="fa fa-star star" ng-if="suggestedChartType == chart"></i>
+	    	<md-tooltip md-direction="bottom">
+	          {{chart}}
+	        </md-tooltip>
+	    </md-grid-tile>
+ 	</md-grid-list>
+    </md-dialog-content>
+    
+    <md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button class="md-raised" ng-click="cancel()">{{::translate.load("sbi.cockpit.editor.widget.movesheet.cancel")}}</md-button>
+    </md-dialog-actions>
+</md-dialog>

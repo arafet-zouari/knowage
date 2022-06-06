@@ -1,0 +1,177 @@
+<md-card   class="flexCard customTableWidgetConfiguration mapWidget" >
+	<md-card-content flex layout="column" class="noPadding">
+	    <md-toolbar> 
+	      <div class="md-toolbar-tools">
+	        <h2>Map widget configuration</h2>
+	        <span flex></span>
+	      </div>
+	    </md-toolbar>
+	    <md-content flex layout="column">
+			<md-tabs flex md-border-bottom>
+
+				<md-tab label="Layers">
+					<md-content class="noPadding" layout="column">
+						
+						<ng-include src="getTemplateUrl('mapWidgetLayers')" flex></ng-include>
+						
+						<md-card class="cockpit-map-widget-edit">
+							<md-toolbar class="secondaryToolbar"> 
+								<div class="md-toolbar-tools">
+									<h2>{{translate.load('sbi.cockpit.map.genericConfiguration')}}</h2>
+									<span flex></span>
+								</div>
+							</md-toolbar>
+							<md-card-content>
+								<md-switch ng-model="newModel.content.enableBaseLayer" aria-label="{{translate.load('sbi.cockpit.map.enableBaseLayer')}}">{{translate.load('sbi.cockpit.map.enableBaseLayer')}}</md-switch>
+								<md-input-container style="width: 33%;">
+									<label>{{translate.load('sbi.cockpit.map.selectBackgroundLayer')}}</label>
+									<md-select ng-model="newModel.content.backgroundLayerId">
+										<md-option value=""></md-option>
+										<md-option ng-repeat="layer in availableBackgroundLayers  | orderBy:'value' " ng-value="layer.key">{{ layer.value }}</md-option>
+									</md-select>
+								</md-input-container>
+								<md-input-container style="width: 33%;">
+									<label>{{translate.load('sbi.cockpit.map.zoomFactor')}}</label>
+									<md-select ng-model="newModel.content.zoomFactor">
+										<md-option ng-value="0.1">10%</md-option>
+										<md-option ng-value="0.2">20%</md-option>
+										<md-option ng-value="0.3">30%</md-option>
+										<md-option ng-value="0.4">40%</md-option>
+										<md-option ng-value="0.5">50%</md-option>
+										<md-option ng-value="0.6">60%</md-option>
+										<md-option ng-value="0.7">70%</md-option>
+										<md-option ng-value="0.8">80%</md-option>
+										<md-option ng-value="0.9">90%</md-option>
+										<md-option ng-value="1.0">100%</md-option>
+									</md-select>
+								</md-input-container>
+								<md-input-container layout="row">
+									<md-switch ng-model="newModel.content.showScale" aria-label="{{translate.load('sbi.cockpit.map.showScale')}}">{{translate.load('sbi.cockpit.map.showScale')}}</md-switch>
+									<md-switch ng-model="newModel.content.autoCentering" aria-label="{{translate.load('sbi.cockpit.map.autoCentering')}}">{{translate.load('sbi.cockpit.map.autoCentering')}}</md-switch>
+								</md-input-container>
+							</md-card-content>
+						</md-card>
+					</md-content>
+				</md-tab>
+
+				<md-tab label="{{translate.load('sbi.cockpit.style')}}">
+
+					<md-card>
+						<md-toolbar class="ternaryToolbar">
+							<div class="md-toolbar-tools" layout="row">{{::translate.load("sbi.cockpit.map.edit.tooltip")}}</div>
+						</md-toolbar>
+						<md-card-content>
+							<div flex layout=column>
+								<div flex layout="row">
+									<md-input-container flex class="md-block" >
+										<label>{{::translate.load("sbi.cockpit.map.edit.tooltip.box.width")}}</label>
+										<input ng-model="newModel.style.tooltip.box['width']" type="text"/>
+										<div class="hint">{{::translate.load('sbi.cockpit.style.fontSize.hint')}}</div>
+									</md-input-container>
+									<md-input-container flex class="md-block" >
+										<label>{{::translate.load("sbi.cockpit.map.edit.tooltip.box.height")}}</label>
+										<input ng-model="newModel.style.tooltip.box['height']" type="text"/>
+										<div class="hint">{{::translate.load('sbi.cockpit.style.fontSize.hint')}}</div>
+									</md-input-container>
+								</div>
+								<div flex layout="row">
+									<md-input-container flex class="md-block" >
+										<label>{{::translate.load("sbi.cockpit.map.edit.tooltip.text.fontSize")}}</label>
+										<input ng-model="newModel.style.tooltip.text['font-size']" type="text"/>
+										<div class="hint">{{::translate.load('sbi.cockpit.style.fontSize.hint')}}</div>
+									</md-input-container>
+									<md-input-container flex class="md-block">
+										<label>{{::translate.load('sbi.cockpit.map.edit.tooltip.text.fontColor')}}</label>
+										<color-picker ng-model="newModel.style.tooltip.text['color']" options="{ 'format': 'rgb' }"/>
+									</md-input-container>
+								</div>
+							</div>
+						</md-card-content>
+					</md-card>
+				
+					<md-card>
+						<md-toolbar class="ternaryToolbar">
+							<div class="md-toolbar-tools" layout="row">{{::translate.load("sbi.cockpit.map.edit.controlPanel")}}</div>
+						</md-toolbar>
+						<md-card-content>
+							<div flex layout=column>
+								<div flex layout="row">
+									<div flex=20 layout="row" layout-align="start center">
+										<md-checkbox ng-model="newModel.controlPanelAlwaysOpen" class="md-block" aria-label="Control panel always open">{{::translate.load("sbi.cockpit.map.edit.controlPanel.alwaysOpen")}}</md-checkbox>
+									</div>
+									<md-input-container flex class="md-block" >
+										<label>{{::translate.load("sbi.cockpit.map.edit.controlPanel.width")}}</label>
+										<input ng-model="newModel.style.controlPanel['width']" type="text"/>
+										<div class="hint">{{::translate.load('sbi.cockpit.style.fontSize.hint')}}</div>
+									</md-input-container>
+								</div>
+							</div>
+						</md-card-content>
+					</md-card>
+					
+					<md-card>
+						<md-toolbar class="ternaryToolbar">
+				      		<div class="md-toolbar-tools" layout="row">{{::translate.load("sbi.cockpit.map.edit.legend.format")}}</div>
+				       </md-toolbar>
+				       <md-card-content>
+				       		<div flex layout=column>
+						       <div flex layout="row" >
+									<md-input-container flex class="md-block" class="small counter">
+										<label> {{::translate.load('sbi.cockpit.style.prefix')}}</label>
+										<input class="input_class" ng-trim="false" ng-model="newModel.style.legend.format.prefix"> 
+									</md-input-container>
+									<md-input-container flex class="md-block" class="small counter">
+										<label>{{::translate.load('sbi.cockpit.style.suffix')}}</label>
+										<input class="input_class" ng-trim="false" ng-model="newModel.style.legend.format.suffix"> 
+									</md-input-container>
+									<md-input-container flex class="md-block" class="small counter"">
+										<label>{{::translate.load('sbi.cockpit.style.precision')}}</label>
+										<input class="input_class" type="number" ng-model="newModel.style.legend.format.precision" min="0""> 
+									</md-input-container>
+						   		</div>
+						   		<div flex layout="row" >
+						   			<md-input-container class="md-block" flex>
+										<label>{{::translate.load("sbi.cockpit.map.edit.legend.alignment")}}</label>
+										<md-select ng-model="newModel.style.legend.alignment">
+											<md-option ng-repeat="pos in availableLegendAlignments" ng-value="pos.value">{{pos.label}}</md-option>
+										</md-select>
+									</md-input-container>
+									<md-input-container class="md-block" flex>
+										<label>{{::translate.load("sbi.cockpit.map.edit.legend.visualizationType")}}</label>
+										<md-select ng-model="newModel.style.legend.visualizationType">
+											<md-option ng-repeat="vis in availableVisualizationTypes" ng-value="vis">{{vis}}</md-option>
+										</md-select>
+									</md-input-container>
+						   		</div>
+						   	</div>
+				       </md-card-content>
+			       	</md-card>
+				
+					<cockpit-style-configurator widget ng-model="newModel.style">
+						<cockpit-style-custom-widget-configurator label="'Padding'">
+							<div layout="row" flex ng-cloak layout-wrap>
+							</div>
+						</cockpit-style-custom-widget-configurator>
+					</cockpit-style-configurator>
+				</md-tab>
+
+		        <md-tab label="{{::translate.load('sbi.cockpit.widget.table.cross')}}">
+					<cockpit-cross-configurator widget ng-cloak ng-model="newModel.cross"></cockpit-cross-configurator>
+				</md-tab>
+				
+				<md-tab label="{{::translate.load('sbi.cockpit.widget.table.filters')}}">
+					<cockpit-filters-configuration ng-model-shared="newModel" ></cockpit-filters-configuration>
+				</md-tab>
+		        
+	      	</md-tabs>
+	    </md-content>
+    </md-card-content>
+    <md-card-actions layout="row"  layout-align="end center">
+	    <md-button class="md-raised" ng-click="cancelConfiguration()" >
+	     {{translate.load('sbi.generic.cancel')}}
+	    </md-button>
+	    <md-button class="md-raised md-primary" ng-click="saveConfiguration()"  >
+	     {{translate.load('sbi.generic.save')}}
+	    </md-button>
+    </md-card-actions>
+</md-card>
